@@ -6,6 +6,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var minifyCSS = require('gulp-clean-css');
 //https://github.com/gulpjs/gulp/blob/master/docs/recipes/delete-files-folder.md
 var del = require('del');
 //*****above is imports*********
@@ -52,5 +53,12 @@ gulp.task('scripts', ['clean'], function() {
         });  
    });
 });
- 
-gulp.task('default', ['clean', 'scripts']);
+
+gulp.task('css', ['scripts'], function(){
+    gulp.src(config.cssFilesSrc)
+        .pipe(minifyCSS())
+        .pipe(concat('style.min.css'))
+        .pipe(gulp.dest(config.cssFilesDest))
+});
+
+gulp.task('default', ['clean', 'scripts', 'css']);
